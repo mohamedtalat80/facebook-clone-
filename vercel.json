@@ -2,7 +2,7 @@
     
     "builds": [  
         {
-            "src": "usermodel/wsgi.py",
+            "src": "user_model/wsgi.py",
             "use": "@vercel/python",
             "config": { "maxLambdaSize": "15mb" ,"runtime":"python3.9.9"}
         }
@@ -10,7 +10,7 @@
     "routes": [
         {
             "src": "/(.*)",
-            "dest": "usermodel/wsgi.py"
+            "dest": "user_model/wsgi.py"
         }
     ]
 }
