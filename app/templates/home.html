@@ -1,0 +1,156 @@
+{% extends 'base.html' %}
+{% block title %}Home Page{% endblock %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<!-- Create Post Section -->
+<div class="container mt-4" style="max-width: 800px;">
+    <div class="card">
+        <div class="card-body">
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="mb-2">
+                    <textarea id="content" class="form-control form-control-sm" rows="1" placeholder="What's on your mind?" name="content"></textarea>
+                </div>
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <input type="file" id="image" class="form-control form-control-sm" name="image">
+                    </div>
+                    <button type="submit" class="btn btn-success btn-sm">Post</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Loop through posts -->
+    {% for post in posts %}
+    <div class="card mt-4">
+        <div class="card-header">
+            <a href="{% url 'view' post.user.username %}">
+                <strong>@{{ post.user.username }}</strong>
+            </a>
+            <div class="card-footer text-muted">
+                {{ post.created_at }}
+            </div>    
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">{{ post.title }}</h5>
+            <p class="card-text" style="font-size: larger;">{{ post.content }}</p>
+            {% if post.image %}
+            <div class="mb-4">
+                <img src="{{ post.image.url }}" alt="Post Image" class="img-fluid" style="max-width: 100%; height: 250px; object-fit: cover;">
+            </div>
+            {% endif %}
+        </div>
+        
+        <!-- Buttons (Edit and Delete) aligned to the right -->
+        <div class="card-body d-flex justify-content-end">
+            {% if request.user == post.user %}
+            <form method='post' class="d-inline">
+                {% csrf_token %}
+                <a href="{% url 'edit-post' post.id %}" class="btn btn-primary">Edit</a>
+            </form>
+            <form method='post' class="d-inline">
+                {% csrf_token %}
+                <input type="hidden" name="post-id-3" value="{{post.id}}">
+                <button type='submit' name="post-id_5" class="btn btn-danger">Delete Post</button>
+            </form>
+            {% endif %}
+        </div>
+        
+        <!-- Like Section -->
+        <div class="card-body">
+            <h6 class="card-subtitle mb-2 text-muted">Likes:</h6>
+            <p><strong>{{ post.likes.all.count }} likes</strong></p>
+            <form method='post'>
+                {% csrf_token %}
+                <input type="hidden" name="post-id-2" value="{{ post.id }}">
+                <input type="hidden" name="like" value="like">
+                <div class="mb-3">
+                    {% if post.user_liked %}
+                    <button type="submit" name="like" class="btn btn-primary btn-lg">Unlike</button>
+                    {% else %}
+                    <button type="submit" name="like" class="btn btn-primary btn-lg">Like</button>
+                    {% endif %}
+                </div>
+            </form>
+        </div>
+        
+        <!-- Comments Section -->
+        <div class="card-body mb-3">
+            <div class="comments">
+                {% for comment in post.comments.all %}
+                {% if not comment.is_reply %}
+                <!-- Main Comment -->
+                <div class="comment mb-3 p-3 border rounded bg-light">
+                    <strong>{{ comment.user_comment.username }}</strong> - {{ comment.comment_content }}
+                    <br>
+                    <small class="text-muted">{{ comment.created_at }}</small>
+                    <a href='{% url "reply_to_comment" comment.id %}' class="btn btn-link btn-sm">Reply</a>
+                    
+                    <!-- Replies to this Comment -->
+                    <div class="replies mt-2" style="margin-left: 20px;">
+                        {% for reply in comment.replies.all %}
+                        {% if forloop.counter == 1 %}
+                        <!-- Show only the first reply -->
+                        <div class="reply mb-2 p-2 border-start border-3">
+                            <strong>{{ reply.user_comment.username }}</strong> - {{ reply.comment_content }}
+                            <br>
+                            <small class="text-muted">{{ reply.created_at }}</small>
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                        
+                        {% if comment.replies.all|length > 1 %}
+                        <!-- Button to toggle all replies -->
+                        <button class="btn btn-link btn-sm text-primary" 
+                        type="button" 
+                        data-bs-toggle="collapse" 
+                        data-bs-target="#replies-{{ comment.id }}" 
+                        aria-expanded="false" 
+                        aria-controls="replies-{{ comment.id }}">
+                        See all replies
+                        </button>
+                        
+                        <!-- Hidden replies -->
+                        <div class="collapse mt-2" id="replies-{{ comment.id }}">
+                            {% for reply in comment.replies.all %}
+                            {% if forloop.counter > 1 %}
+                            <div class="reply mb-2 p-2 border-start border-3">
+                                <strong>{{ reply.user_comment.username }}</strong> - {{ reply.comment_content }}
+                                <br>
+                                <small class="text-muted">{{ reply.created_at }}</small>
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Add a Comment Section -->
+        <div class="col-md-4">
+            <h6 class="card-subtitle mb-2 text-muted">Add a Comment:</h6>
+            <form method='post'>
+                {% csrf_token %}
+                <input type="hidden" name="post-id-1" value="{{ post.id }}">
+                <div class="mb-3">
+                    <div class="form-control">
+                        {{ comment_form.comment_content }}
+                    </div>
+                    <button type="submit" name="comment" class="btn btn-primary mt-2">Comment</button>
+                </div>
+            </form>
+        </div>
+    </div>
+  
+    <!-- If there are no posts -->
+    {% empty %}
+    <p>No posts yet :)</p>
+    {% endfor %}
+</div>
+{% endblock %}

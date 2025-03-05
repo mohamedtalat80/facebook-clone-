@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags %}
+{% block title %}
+{% if target_user == request.user %} Your Posts
+{% else %}
+Posts by {{ target_user }}
+{% endif %}
+{% endblock title %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-4">
+            <!-- Display Profile Content -->
+            <img src='{{ profile_content.profile_pic.url }}' class="img-fluid mb-3" alt="Profile Picture">
+            <h4>{{ profile_content.user.username }}</h4>
+            <p>{{ profile_content.bio }}</p>
+            <p>Status: {{ profile_content.status }}</p>
+            <p>Date of Birth: {{ profile_content.date_of_birth }}</p>
+            <p>Lives In: {{ profile_content.lives_in }}</p>
+        </div>
+
+        <div class="col-md-8">
+            {% for post in user_posts %}
+                <!-- User's Posts -->
+                <div class='card mt-2'>
+                    <div class="card-header"><strong>@{{ post.user.username }}</strong></div>
+                    <div class="card-body d-flex flex-row justify-content-between">
+                        <div>
+                            <h5 class="card-title">{{ post.title }}</h5>
+                            <p>{{ post.content }}</p>
+                        </div>
+                        <div>
+                            {% if request.user == post.user %}
+                                <form method='post'>
+                                    {% csrf_token %}
+                                    <button type='submit' name="post-id" class="btn btn-danger" value="{{ post.id }}">Delete</button>
+                                </form>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="card-footer text-muted">{{ post.created_at }}</div>
+                </div>
+            {% empty %}
+                <p>No posts yet :)</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock content %}

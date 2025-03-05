@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Template</title>
+</head>
+<body>
+    <div id='div-form' >
+    <h1>Form Submission</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input name="txtName" type="text" maxlength="250" id="txtName" class="form-control custfield" placeholder="ادخل اسمك الكامل" value="{{ form.txtName.value }}">
+        <select name="ddlNationality" id="ddlNationality" class="form-control custfield">
+            <option value="0">اختر الجنسية</option>
+            <option value="99" {% if form.ddlNationality.value == "99" %}selected="selected"{% endif %}>الأردن</option>
+            <option value="192" {% if form.ddlNationality.value == "192" %}selected="selected"{% endif %}>سوريا</option>
+        </select>
+        <input name="txtPassportNu" type="text" maxlength="10" id="txtPassportNu" class="form-control custfield" placeholder="أدخل رقم جواز السفر" value="{{ form.txtPassportNu.value }}">
+        <input name="txtIDNumber" type="text" maxlength="11" id="txtIDNumber" class="form-control custfield" placeholder="أدخل الرقم الوطني" value="{{ form.txtIDNumber.value }}">
+        <input name="txtCarNumber" type="text" maxlength="10" id="txtCarNumber" class="form-control custfield" placeholder="أدخل رقم السيارة" value="{{ form.txtCarNumber.value }}">
+        <input name="txtEmail" type="text" maxlength="150" id="txtEmail" class="form-control custfield" onkeypress="return AvoidSpace()" placeholder="ادخل بريدك الالكتروني" value="{{ form.txtEmail.value }}">
+        <select name="ddlCountryCode" id="ddlCountryCode" class="form-control custfield">
+            <option value="0" {% if form.ddlCountryCode.value == "0" %}selected="selected"{% endif %}>رمز الدولة</option>
+            <option value="00962" {% if form.ddlCountryCode.value == "00962" %}selected="selected"{% endif %}>الأردن - 00962</option>
+            <option value="00963" {% if form.ddlCountryCode.value == "00963" %}selected="selected"{% endif %}>سوريا - 00963</option>
+        </select>
+        <input name="txtMobile" type="text" maxlength="9" id="txtMobile" class="form-control custfield" placeholder="ادخل رقم اتصال فعال" value="{{ form.txtMobile.value }}">
+        <input name="chAgreed3" type="checkbox" id="chAgreed3" class="checkboxbtn" {% if form.chAgreed3.value %}checked="checked"{% endif %}>
+        
+          
+ <!-- File Upload Field -->
+ <input type="file" name="FileUpload2" id="FileUpload2" style="display: block !important">
+       
+
+        <!-- Submit Button -->
+        <input type="submit" name="SubmitInvest" value="إرسال الطلب" >
+    </form>
+</div>
+</body>
+</html>

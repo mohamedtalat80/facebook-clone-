@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block title %}Create Profile{% endblock title %}
+{% block content %}
+<div class="card mt-4">
+    <div class="card-header">
+        <h5>create a profile</h5>
+    </div>
+    <div class="card-body">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            {{ profile|crispy }}
+            <button type="submit" name="create-profile" class="btn btn-success float-end">Create</button>
+            <button type="submit" name='skip' class="btn btn-secondary">Skip</button>
+
+        </form>
+    </div>
+</div>
+
+{% endblock content %}

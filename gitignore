@@ -1,0 +1,40 @@
+    # Ignore Python compiled files  
+__pycache__/  
+*.py[cod]  
+
+# Ignore environment variables and sensitive files  
+.env  
+*.secret  
+
+# Ignore virtual environments  
+venv/  
+.env/  
+
+# Ignore Django migrations cache  
+**/migrations/**  
+!**/migrations/__init__.py  
+
+# Ignore SQLite database (if used)  
+db.sqlite3  
+
+# Ignore media and static files (if not pushing them)  
+media/  
+staticfiles/  
+
+# Ignore logs and debugging files  
+*.log  
+*.bak  
+
+# Ignore JetBrains IDE (PyCharm) settings  
+.idea/  
+
+# Ignore VS Code settings  
+.vscode/  
+
+# Ignore Docker-related files  
+docker-compose.override.yml  
+.dockerignore  
+
+# Ignore Git metadata  
+.DS_Store  
+Thumbs.db  

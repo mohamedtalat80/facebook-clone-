@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block title %}reply{% endblock title %}
+{% block content %}
+<!-- Display the comment at the top -->
+<div class="comment-content">
+    <strong>{{ comment.user_comment.username }}</strong> - {{ comment.comment_content }}<br>
+    <small>{{ comment.created_at }}</small>
+</div>
+<!-- Display replies to the comment if they exist -->
+{% if comment.replies.all %}
+    <div class="replies">
+        {% for reply in comment.replies.all %}
+            <div class="comment mb-2 ml-4">
+                <strong>{{ reply.user_comment.username }}</strong> - {{ reply.comment_content }}<br>
+                <small>{{ reply.created_at }}</small>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+<!-- Text area for the reply form in the middle -->
+<form method="post" class="mt-2">
+    {% csrf_token %}
+    <div class="form-group">
+        {{ reply_form.comment_content|as_crispy_field }}
+    </div>
+    <button type="submit" name="reply" class="btn btn-primary mt-2">Reply</button>
+</form>
+<!-- End of Reply Form -->
+
+{% endblock content %}
