@@ -19,7 +19,7 @@ db.sqlite3
 
 # Ignore media and static files (if not pushing them)  
 media/  
-staticfiles/  
+
 
 # Ignore logs and debugging files  
 *.log  
