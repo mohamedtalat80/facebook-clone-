@@ -18,7 +18,7 @@ venv/
 db.sqlite3  
 
 # Ignore media and static files (if not pushing them)  
-media/  
+  
 
 
 # Ignore logs and debugging files  
@@ -38,3 +38,5 @@ docker-compose.override.yml
 # Ignore Git metadata  
 .DS_Store  
 Thumbs.db  
+#ignore .env file
+.env
