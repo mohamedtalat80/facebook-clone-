@@ -3,9 +3,10 @@
       {
           "src": "user_model/wsgi.py",
           "use": "@vercel/python",
-          "config": { 
+          "config": {
               "maxLambdaSize": "15mb",
-              "runtime": "python3.12"
+              "runtime": "python3.12",
+              "buildCommand": "pip install -r requirements.txt && python manage.py collectstatic --noinput"
           }
       }
   ],
@@ -14,8 +15,5 @@
           "src": "/(.*)",
           "dest": "user_model/wsgi.py"
       }
-  ],
-  "build": {
-      "command": "pip install -r requirements.txt && python manage.py collectstatic --noinput"
-  }
+  ]
 }
