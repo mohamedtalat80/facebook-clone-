@@ -107,24 +107,20 @@ WSGI_APPLICATION = 'user_model.wsgi.application'
 
 import os
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
-
-if 'DATABASE_URL' in os.environ:  # لما ترفع على Vercel
-    DATABASES['default'] = {
+DATABASES = {   
+ 'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': os.environ.get('DB_USER'),
-        'PASSWORD': os.environ.get('DB_PASSWORD'),
-        'HOST': os.environ.get('DB_HOST'),
-        'PORT': os.environ.get('DB_PORT'),
-    }
-
-
+        'NAME': config('DB_NAME'),  # Database name
+        'USER': config('DB_USER'),  # Database user
+        'PASSWORD': config('DB_PASSWORD'),  # Database password
+        'HOST': config('DB_HOST'),  # Database host
+        'PORT': config('DB_PORT'),  # Database port
+        'OPTIONS': {
+            'sslmode': 'require',  # Enable SSL
+        },
+ 
+ }
+}
 
 
 # Password validation
