@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'drf_yasg',
     # 'allauth',
     # 'allauth.account',
     # 'allauth.socialaccount',
@@ -104,20 +105,24 @@ WSGI_APPLICATION = 'user_model.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+import os
+
 DATABASES = {
-    
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config('DB_NAME'),  # Database name
-        'USER': config('DB_USER'),  # Database user
-        'PASSWORD': config('DB_PASSWORD'),  # Database password
-        'HOST': config('DB_HOST'),  # Database host
-        'PORT': config('DB_PORT'),  # Database port
-        'OPTIONS': {
-            'sslmode': 'require',  # Enable SSL
-        },
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+
+if 'DATABASE_URL' in os.environ:  # لما ترفع على Vercel
+    DATABASES['default'] = {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',
+        'USER': os.environ.get('DB_USER'),
+        'PASSWORD': os.environ.get('DB_PASSWORD'),
+        'HOST': os.environ.get('DB_HOST'),
+        'PORT': os.environ.get('DB_PORT'),
+    }
 
 
 
