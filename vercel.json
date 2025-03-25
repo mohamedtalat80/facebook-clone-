@@ -1,27 +1,21 @@
 {
-    "builds": [
+  "builds": [
       {
-        "src": "user_model/wsgi.py",
-        "use": "@vercel/python",
-        "config": { 
-          "maxLambdaSize": "15mb",
-          "runtime": "python3.12"
-        }
+          "src": "user_model/wsgi.py",
+          "use": "@vercel/python",
+          "config": { 
+              "maxLambdaSize": "15mb",
+              "runtime": "python3.12"
+          }
       }
-    ],
-    "routes": [
+  ],
+  "routes": [
       {
-        "src": "/static/(.*)",
-        "dest": "/staticfiles/$1"
-      },
-      {
-        "src": "/(.*)",
-        "dest": "user_model/wsgi.py"
+          "src": "/(.*)",
+          "dest": "user_model/wsgi.py"
       }
-    ],
-    "build": {
-      "env": {
-        "BUILD_COMMANDS": "apt-get update && apt-get install -y libjpeg-dev zlib1g-dev"
-      }
-    }
+  ],
+  "build": {
+      "command": "pip install -r requirements.txt && python manage.py collectstatic --noinput"
   }
+}
